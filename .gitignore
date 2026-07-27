@@ -1,0 +1,9 @@
+# These files will not be committed to github
+.env
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+.vscode/
+*.log
