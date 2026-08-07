@@ -7,3 +7,11 @@ __pycache__/
 .DS_Store
 .vscode/
 *.log
+
+# Flutter / Dart
+**/.dart_tool/
+**/build/
+**/pubspec.lock
+**/*.iml
+**/.flutter-plugins
+**/.flutter-plugins-dependencies

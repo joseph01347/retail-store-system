@@ -6,6 +6,7 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
 
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import Optional, List
 from uuid import UUID, uuid4
@@ -16,6 +17,32 @@ from shared.db import get_shard_connection, SHARD_CONFIGS
 from shared.event_bus import event_bus
 
 app = FastAPI(title="Inventory Service", version="1.0.0", port=8002)
+
+# ============================================================
+# CORS MIDDLEWARE (Environment-Aware)
+# ============================================================
+
+# Get the environment from .env or default to 'development'
+ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
+
+if ENVIRONMENT == "production":
+    # In production, ONLY allow the deployed frontend domain
+    # Replace with  actual GitHub Pages or Vercel URL later
+    allowed_origins = [
+        "https://joseph01347.github.io",  # Example for GitHub Pages
+        "https://yourdomain.com",         # Custom deployment domain if you have one
+    ]
+else:
+    # In development, allow all origins (because of random ports)
+    allowed_origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allowed_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # ============================================================
 # PYDANTIC MODELS
